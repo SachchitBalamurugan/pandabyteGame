@@ -3,12 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:game_pandabyte/pixel_adventure.dart';
 import 'package:flame/flame.dart';
+import 'menu_overlay.dart';
+import 'components/player.dart'; // Import the player component
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Flame.device.fullScreen();
-  // Flame.device.setLandscape(); do it if I want landscape mode when playing
+  // Flame.device.setLandscape(); // Uncomment if you want landscape mode when playing
 
   PixelAdventure game = PixelAdventure();
-  runApp(GameWidget(game: kDebugMode ? PixelAdventure() : game)); // when publishing change this to just game  runApp(GameWidget(game: game)
+  Player player = Player(character: 'Pink Man', position: Vector2(0, 0)); // Initialize Player
 
+  runApp(MaterialApp(
+    home: Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          GameWidget(game: kDebugMode ? PixelAdventure() : game),
+          MenuOverlay(game: game, player: player), // Pass both game and player to the MenuOverlay
+        ],
+      ),
+    ),
+  ));
 }

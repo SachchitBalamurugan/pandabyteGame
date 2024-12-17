@@ -7,11 +7,11 @@ import 'package:game_pandabyte/components/utils.dart';
 import 'dart:async';
 
 import 'package:game_pandabyte/pixel_adventure.dart';
-
-enum PlayerState {idle, running, jumping, falling}
+double isMoveRequested = 1;
+enum PlayerState { idle, running, jumping, falling }
 
 class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, KeyboardHandler{
+    with HasGameRef<PixelAdventure>, KeyboardHandler {
   String character;
   Player({position, required this.character}) : super(position: position);
 
@@ -22,9 +22,10 @@ class Player extends SpriteAnimationGroupComponent
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
-  final double _jumpForce = 280; //change jump height
+  final double _jumpForce = 280; // change jump height
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
+
   double moveSpeed = 100;
   Vector2 velocity = Vector2.zero();
   bool isOnGround = false;
@@ -40,23 +41,37 @@ class Player extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
-    // debugMode = true;
     add(RectangleHitbox(
-      position: Vector2(hitbox.offsetX, hitbox.offsetY),
-      size: Vector2(hitbox.width, hitbox.height)
+        position: Vector2(hitbox.offsetX, hitbox.offsetY),
+        size: Vector2(hitbox.width, hitbox.height)
     ));
     return super.onLoad();
   }
 
   @override
   void update(double dt) {
+    // Wait until isMoveRequested is true to proceed with movement logic
+    if (isMoveRequested == 0) {
+      // Move left by 1 step
+      moveLeft(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+    } else if (isMoveRequested == 2) {
+      // Move right by 1 step
+      moveRight(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+    }
+
+
+    // Continue updating other player states and logic
     _updatePlayerState();
     _updatePlayerMovement(dt);
     _checkHorizontalCollisions();
     _applyGravity(dt);
     _checkVerticalCollisions();
-    super.update(dt);
+
+    super.update(dt);  // Call the superclass's update method
   }
+
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
@@ -70,32 +85,35 @@ class Player extends SpriteAnimationGroupComponent
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
 
+
     hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
     return super.onKeyEvent(event, keysPressed);
   }
+
   void _loadAllAnimations() {
     idleAnimation = _spriteAnimation('Idle', 11);
     runningAnimation = _spriteAnimation('Run', 12);
     jumpingAnimation = _spriteAnimation('Jump', 1);
     fallingAnimation = _spriteAnimation('Fall', 1);
 
-    //list of all animations
+    // List of all animations
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.running: runningAnimation,
       PlayerState.jumping: jumpingAnimation,
       PlayerState.falling: fallingAnimation
     };
-    // set current animation
+
+    // Set current animation
     current = PlayerState.idle;
   }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(game.images.fromCache('Main Characters/$character/$state (32x32).png'),
         SpriteAnimationData.sequenced(
-            amount: amount,
-            stepTime: stepTime,
-            textureSize: Vector2.all(32),
+          amount: amount,
+          stepTime: stepTime,
+          textureSize: Vector2.all(32),
         )
     );
   }
@@ -103,23 +121,23 @@ class Player extends SpriteAnimationGroupComponent
   void _updatePlayerState() {
     PlayerState playerState = PlayerState.idle;
 
-    if(velocity.x < 0 && scale.x > 0){
+    if (velocity.x < 0 && scale.x > 0) {
       flipHorizontallyAroundCenter();
-    } else if(velocity.x > 0 && scale.x < 0) {
+    } else if (velocity.x > 0 && scale.x < 0) {
       flipHorizontallyAroundCenter();
     }
-    //check if moving, set running
-    if(velocity.x > 0 || velocity.x < 0) playerState = PlayerState.running;
-    //check if falling, set to falling
-    if(velocity.y > 0) playerState = PlayerState.falling;
-    //check if jumping, set to jumping
-    if(velocity.y < 0) playerState = PlayerState.jumping;
+    // Check if moving, set to running
+    if (velocity.x > 0 || velocity.x < 0) playerState = PlayerState.running;
+    // Check if falling, set to falling
+    if (velocity.y > 0) playerState = PlayerState.falling;
+    // Check if jumping, set to jumping
+    if (velocity.y < 0) playerState = PlayerState.jumping;
     current = playerState;
   }
 
   void _updatePlayerMovement(double dt) {
-    if(hasJumped && isOnGround) _playerJump(dt);
-    if(velocity.y > _gravity) isOnGround = false;
+    if (hasJumped && isOnGround) _playerJump(dt);
+    if (velocity.y > _gravity) isOnGround = false;
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
@@ -131,17 +149,42 @@ class Player extends SpriteAnimationGroupComponent
     hasJumped = false;
   }
 
+  //test remove if needed:
+  // Make sure moveLeft and moveRight are properly handled
+  void moveLeft(double distance) {
+
+
+    horizontalMovement = -distance; // Move left
+
+    print('moveLeft called with distance: $distance'); // Print statement for testing
+    print(isMoveRequested);
+  }
+
+  void moveRight(double distance) {
+    horizontalMovement = distance; // Move right
+    Future.delayed(Duration(milliseconds: 300), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+  }
+
+  void stopMovement() {
+    horizontalMovement = 0; // Stop horizontal movement
+    print('Movement stopped');
+  }
+
+
+
   void _checkHorizontalCollisions() {
-    for(final block in collisionBlocks) {
-      // handle collision
-      if(!block.isPlatform){
-        if(checkCollision(this, block)) {
-          if(velocity.x > 0) {
+    for (final block in collisionBlocks) {
+      // Handle collision
+      if (!block.isPlatform) {
+        if (checkCollision(this, block)) {
+          if (velocity.x > 0) {
             velocity.x = 0;
             position.x = block.x - hitbox.offsetX - hitbox.width;
             break;
           }
-          if(velocity.x < 0) {
+          if (velocity.x < 0) {
             velocity.x = 0;
             position.x = block.x + block.width + hitbox.width + hitbox.offsetX;
             break;
@@ -158,11 +201,11 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _checkVerticalCollisions() {
-    for(final block in collisionBlocks) {
-      if(block.isPlatform) {
-        // handle platforms
-        if(checkCollision(this, block)){
-          if(velocity.y > 0) {
+    for (final block in collisionBlocks) {
+      if (block.isPlatform) {
+        // Handle platforms
+        if (checkCollision(this, block)) {
+          if (velocity.y > 0) {
             velocity.y = 0;
             position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
@@ -170,14 +213,14 @@ class Player extends SpriteAnimationGroupComponent
           }
         }
       } else {
-        if(checkCollision(this, block)){
-          if(velocity.y > 0) {
+        if (checkCollision(this, block)) {
+          if (velocity.y > 0) {
             velocity.y = 0;
             position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
             break;
           }
-          if(velocity.y < 0) {
+          if (velocity.y < 0) {
             velocity.y = 0;
             position.y = block.y + block.height - hitbox.offsetY;
           }
