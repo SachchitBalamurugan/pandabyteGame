@@ -9,7 +9,6 @@ class MenuOverlay extends StatefulWidget {
     required this.player,
   }) : super(key: key);
 
-
   final PixelAdventure game;
   final Player player;
 
@@ -18,9 +17,6 @@ class MenuOverlay extends StatefulWidget {
 }
 
 class _MenuOverlayState extends State<MenuOverlay> {
-  // Global flag to track movement state
-
-
   String _selectedOption = 'Player.moveRight(1)';
   final List<String> _options = [
     'Player.moveRight(1)',
@@ -34,20 +30,10 @@ class _MenuOverlayState extends State<MenuOverlay> {
 
   void _handleCommand(String command) {
     if (command == 'Player.moveRight(1)') {
-      // Set global flag to true
       isMoveRequested = 2;
-
       widget.player.moveRight(1);
     } else if (command == 'Player.moveLeft(1)') {
-      // Set global flag to true
       isMoveRequested = 0;
-      // } else if (command == 'Player.jumpRight(1)') {
-      //   widget.player.jumpRight(1);
-      // } else if (command == 'Player.jumpLeft(1)') {
-      //   widget.player.jumpLeft(1);
-      // } else if (command == 'Player.attack()') {
-      //   widget.player.attack();
-      // }
     } else if (command == 'Player.jumpRight(1)') {
       isMoveRequested = 3;
     } else if (command == 'Player.jumpLeft(1)') {
@@ -73,6 +59,16 @@ class _MenuOverlayState extends State<MenuOverlay> {
       isMoveRequested = 1;
       widget.player.stopMovement();
     }
+  }
+
+  void _completeAndNavigate() {
+    _runCommand();
+    setState(() {
+      // Change button text to 'Done'
+      // Optional: You can change any other state related to completion here.
+    });
+    // Navigate back to Course.dart screen after completion
+    Navigator.pop(context);
   }
 
   @override
@@ -131,8 +127,8 @@ class _MenuOverlayState extends State<MenuOverlay> {
                 ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: _runCommand,
-                child: Text('Run', style: TextStyle(color: Colors.black)),
+                onPressed: _completeAndNavigate, // Use the new method
+                child: Text('Done', style: TextStyle(color: Colors.black)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),

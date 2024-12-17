@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
+            Navigator.pop(context); // Go back to the previous page
           },
         ),
         title: Text(
@@ -51,11 +51,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[0] = true;
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => RobotGamePage() ),
-                      //
-                      // );
+                      Navigator.pushNamed(context, '/game'); // Navigate using named route
                     },
                     child: buildCircle(
                       "Programming Fundamentals",
@@ -70,13 +66,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[1] = true;
                       });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CoursePage(
-                              courseName: 'Course 2: Data Structures',
-                            )),
-                      );
+                      Navigator.pushNamed(context, '/dataStructures'); // Navigate using named route
                     },
                     child: buildCircle(
                       "Data Structures",
@@ -91,13 +81,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[2] = true;
                       });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CoursePage(
-                              courseName: 'Course 3: Algorithms',
-                            )),
-                      );
+                      Navigator.pushNamed(context, '/algorithms'); // Navigate using named route
                     },
                     child: buildCircle(
                       "Algorithms",
@@ -112,13 +96,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[3] = true;
                       });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CoursePage(
-                              courseName: 'Course 4: Advanced Topics',
-                            )),
-                      );
+                      Navigator.pushNamed(context, '/advancedTopics'); // Navigate using named route
                     },
                     child: buildCircle(
                       "Advanced Topics",
