@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
+import 'package:game_pandabyte/components/collision_block.dart';
 import 'dart:async';
 
 import 'package:game_pandabyte/pixel_adventure.dart';
@@ -18,6 +19,7 @@ class Player extends SpriteAnimationGroupComponent
   double horizontalMovement = 0;
   double moveSpeed = 100;
   Vector2 velocity = Vector2.zero();
+  List<CollisionBlock> collisionBlocks = [];
 
   @override
   FutureOr<void> onLoad() {
