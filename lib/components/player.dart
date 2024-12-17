@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:game_pandabyte/pixel_adventure.dart';
 
-enum PlayerState {idle, running}
+enum PlayerState {idle, running, jumping, falling}
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler{
@@ -15,6 +15,8 @@ class Player extends SpriteAnimationGroupComponent
 
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
+  late final SpriteAnimation jumpingAnimation;
+  late final SpriteAnimation fallingAnimation;
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
@@ -62,11 +64,15 @@ class Player extends SpriteAnimationGroupComponent
   void _loadAllAnimations() {
     idleAnimation = _spriteAnimation('Idle', 11);
     runningAnimation = _spriteAnimation('Run', 12);
+    jumpingAnimation = _spriteAnimation('Jump', 1);
+    fallingAnimation = _spriteAnimation('Fall', 1);
 
     //list of all animations
     animations = {
       PlayerState.idle: idleAnimation,
-      PlayerState.running: runningAnimation
+      PlayerState.running: runningAnimation,
+      PlayerState.jumping: jumpingAnimation,
+      PlayerState.falling: fallingAnimation
     };
     // set current animation
     current = PlayerState.idle;
@@ -92,12 +98,16 @@ class Player extends SpriteAnimationGroupComponent
     }
     //check if moving, set running
     if(velocity.x > 0 || velocity.x < 0) playerState = PlayerState.running;
-
+    //check if falling, set to falling
+    if(velocity.y > 0) playerState = PlayerState.falling;
+    //check if jumping, set to jumping
+    if(velocity.y < 0) playerState = PlayerState.jumping;
     current = playerState;
   }
 
   void _updatePlayerMovement(double dt) {
     if(hasJumped && isOnGround) _playerJump(dt);
+    if(velocity.y > _gravity) isOnGround = false;
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
@@ -139,6 +149,14 @@ class Player extends SpriteAnimationGroupComponent
     for(final block in collisionBlocks) {
       if(block.isPlatform) {
         // handle platforms
+        if(checkCollision(this, block)){
+          if(velocity.y > 0) {
+            velocity.y = 0;
+            position.y = block.y - width;
+            isOnGround = true;
+            break;
+          }
+        }
       } else {
         if(checkCollision(this, block)){
           if(velocity.y > 0) {
