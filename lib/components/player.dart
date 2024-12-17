@@ -22,7 +22,7 @@ class Player extends SpriteAnimationGroupComponent
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
-  final double _jumpForce = 280; // change jump height
+  final double _jumpForce = 200; // change jump height
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
 
@@ -59,6 +59,16 @@ class Player extends SpriteAnimationGroupComponent
       // Move right by 1 step
       moveRight(1);
       isMoveRequested = 1;  // Stop further movement until triggered again
+
+      } else if (isMoveRequested == 3) {
+        // Move right by 1 step
+        // moveRight(1);
+        // isMoveRequested = 1;  // Stop further movement until triggered again
+        if (isOnGround) {
+          _playerJump(dt);  // Trigger the jump
+          moveRight(1);
+
+        }
     }
 
 
@@ -143,10 +153,14 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    velocity.y = -_jumpForce;
-    position.y += velocity.y * dt;
-    isOnGround = false;
-    hasJumped = false;
+    if (isMoveRequested == 3) {
+      velocity.y = -_jumpForce;
+      position.y += velocity.y * dt;
+      isOnGround = false;
+      hasJumped = false;
+
+    }
+    isMoveRequested = 1;
   }
 
   //test remove if needed:
@@ -155,7 +169,9 @@ class Player extends SpriteAnimationGroupComponent
 
 
     horizontalMovement = -distance; // Move left
-
+    Future.delayed(Duration(milliseconds: 300), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
     print('moveLeft called with distance: $distance'); // Print statement for testing
     print(isMoveRequested);
   }

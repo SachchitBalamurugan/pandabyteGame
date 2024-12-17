@@ -41,8 +41,6 @@ class _MenuOverlayState extends State<MenuOverlay> {
     } else if (command == 'Player.moveLeft(1)') {
       // Set global flag to true
       isMoveRequested = 0;
-
-      widget.player.moveLeft(1);
       // } else if (command == 'Player.jumpRight(1)') {
       //   widget.player.jumpRight(1);
       // } else if (command == 'Player.jumpLeft(1)') {
@@ -50,6 +48,8 @@ class _MenuOverlayState extends State<MenuOverlay> {
       // } else if (command == 'Player.attack()') {
       //   widget.player.attack();
       // }
+    } else if (command == 'Player.jumpRight(1)') {
+      isMoveRequested = 3;
     }
   }
 
