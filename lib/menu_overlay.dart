@@ -27,7 +27,7 @@ class _MenuOverlayState extends State<MenuOverlay> {
     'Player.moveLeft(1)',
     'Player.jumpRight(1)',
     'Player.jumpLeft(1)',
-    'Player.attack()',
+    'Player.jump()',
   ];
 
   List<String> _commandsInCodeSpace = [];
@@ -52,6 +52,8 @@ class _MenuOverlayState extends State<MenuOverlay> {
       isMoveRequested = 3;
     } else if (command == 'Player.jumpLeft(1)') {
       isMoveRequested = 4;
+    } else if (command == 'Player.jump()') {
+      isMoveRequested = 5;
     }
   }
 

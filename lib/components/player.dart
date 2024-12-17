@@ -78,6 +78,15 @@ class Player extends SpriteAnimationGroupComponent
             moveLeft(1);
 
           }
+    } else if (isMoveRequested == 5) {
+      // Move right by 1 step
+      // moveRight(1);
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt);  // Trigger the jump
+
+
+      }
     }
 
 
@@ -162,7 +171,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (isMoveRequested == 3 || isMoveRequested == 4) {
+    if (isMoveRequested == 3 || isMoveRequested == 4 || isMoveRequested == 5) {
       velocity.y = -_jumpForce;
       position.y += velocity.y * dt;
       isOnGround = false;
