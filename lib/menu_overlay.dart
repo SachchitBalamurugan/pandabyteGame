@@ -50,6 +50,8 @@ class _MenuOverlayState extends State<MenuOverlay> {
       // }
     } else if (command == 'Player.jumpRight(1)') {
       isMoveRequested = 3;
+    } else if (command == 'Player.jumpLeft(1)') {
+      isMoveRequested = 4;
     }
   }
 

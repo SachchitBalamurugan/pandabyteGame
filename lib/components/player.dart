@@ -61,14 +61,23 @@ class Player extends SpriteAnimationGroupComponent
       isMoveRequested = 1;  // Stop further movement until triggered again
 
       } else if (isMoveRequested == 3) {
-        // Move right by 1 step
-        // moveRight(1);
-        // isMoveRequested = 1;  // Stop further movement until triggered again
-        if (isOnGround) {
-          _playerJump(dt);  // Trigger the jump
-          moveRight(1);
+      // Move right by 1 step
+      // moveRight(1);
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveRight(1);
+      }
+    }
+        else if (isMoveRequested == 4) {
+          // Move right by 1 step
+          // moveRight(1);
+          // isMoveRequested = 1;  // Stop further movement until triggered again
+          if (isOnGround) {
+            _playerJump(dt);  // Trigger the jump
+            moveLeft(1);
 
-        }
+          }
     }
 
 
@@ -153,7 +162,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (isMoveRequested == 3) {
+    if (isMoveRequested == 3 || isMoveRequested == 4) {
       velocity.y = -_jumpForce;
       position.y += velocity.y * dt;
       isOnGround = false;
