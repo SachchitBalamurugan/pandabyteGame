@@ -16,6 +16,9 @@ class Fruit extends SpriteAnimationComponent with HasGameRef<PixelAdventure>, Co
     size: size
   );
 
+  bool _collected = false;
+  bool hasPrinted = false;
+
   final double stepTime = 0.05;
   final hitbox = CustomHitbox(
       offsetX: 10,
@@ -45,7 +48,31 @@ class Fruit extends SpriteAnimationComponent with HasGameRef<PixelAdventure>, Co
   }
 
   void collidingWithPlayer() {
-    removeFromParent();
+    if(!_collected) {
+      animation = SpriteAnimation.fromFrameData(
+          game.images.fromCache('Items/Fruits/Collected.png'),
+          SpriteAnimationData.sequenced(
+              amount: 6,
+              stepTime: stepTime,
+              textureSize: Vector2.all(32),
+            loop: false
+          ));
+      _collected = true;
+    }
+    Future.delayed(
+      const Duration(milliseconds: 400),
+          () {
+        if (!hasPrinted) {
+          print('done');
+          // implement the scoring logic here
+          hasPrinted = true;
+        }
+        removeFromParent();
+      },
+    );
+
+
+    //removeFromParent();
   }
 
 }
