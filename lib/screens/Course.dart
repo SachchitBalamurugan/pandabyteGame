@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'mazeGame.dart';
+
+String gameLevel = 'Level_01';
+
 class Course1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -51,6 +55,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[0] = true;
                       });
+                      gameLevel = 'Level_01';
                       Navigator.pushNamed(context, '/game'); // Navigate using named route
                     },
                     child: buildCircle(
@@ -66,7 +71,8 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[1] = true;
                       });
-                      Navigator.pushNamed(context, '/dataStructures'); // Navigate using named route
+                      gameLevel = 'Level_02';
+                      Navigator.pushNamed(context, '/game'); // Navigate using named route
                     },
                     child: buildCircle(
                       "Data Structures",
@@ -81,7 +87,8 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[2] = true;
                       });
-                      Navigator.pushNamed(context, '/algorithms'); // Navigate using named route
+                      gameLevel = 'Level_03';
+                      Navigator.pushNamed(context, '/game'); // Navigate using named route
                     },
                     child: buildCircle(
                       "Algorithms",
@@ -94,16 +101,20 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        circleStates[3] = true;
+                        circleStates[3] = true; // Update the state
                       });
-                      Navigator.pushNamed(context, '/advancedTopics'); // Navigate using named route
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RobotGamePage()), // Navigate to RobotGamePage
+                      );
                     },
                     child: buildCircle(
-                      "Advanced Topics",
+                      "Advanced Topiscs",
                       circleStates[3] ? activeCircleColor : circleColor,
                     ),
                   ),
                   SizedBox(height: 40),
+
                 ],
               ),
             ),

@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart'; // Import Flutter's Material package
+import 'package:game_pandabyte/screens/Course.dart';
 import 'dart:async';
 import 'components/level.dart';
 
@@ -12,7 +13,7 @@ class PixelAdventure extends FlameGame with HasKeyboardHandlerComponents {
   Color backgroundColor() => const Color(0xFF211F30);
   late final CameraComponent cam;
 
-  final world = Level(levelName: 'Level_01'); // change the level here
+  final world = Level(levelName: gameLevel); // change the level here
 
   String selectedCommand = 'Player.jumpRight(1)'; // Default command for the dropdown
   String commandHistory = ''; // To store the history of selected commands

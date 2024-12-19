@@ -4,8 +4,10 @@ import 'package:game_pandabyte/pixel_adventure.dart';
 import 'package:flame/flame.dart';
 import 'package:game_pandabyte/menu_overlay.dart'; // Import the menu overlay
 import 'package:game_pandabyte/screens/Course.dart';
+import 'package:game_pandabyte/screens/battle.dart';
 import 'package:game_pandabyte/screens/home_page.dart'; // Import the homepage
 import 'components/player.dart';
+import 'screens/gallery.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +34,8 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = [
     HomePage(), // HomePage
-    GamePage(), // GamePage
-    TestPage(), // TestPage
+    BattleScreen(), // GamePage
+    CharacterGalleryScreen(), // TestPage
     CoursePage(), // CoursePage
   ];
 
@@ -140,17 +142,30 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          _buildCard(context, "Assignments", Course1()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildCard(context, "Assignments", Course1()),
+          ),
           SizedBox(height: 20),
-          _buildCard(context, "Favorites", FavoritePage()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildCard(context, "Favorites", FavoritePage()),
+          ),
           SizedBox(height: 20),
-          _buildCard(context, "Treasure", TreasurePage()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildCard(context, "Treasure", TreasurePage()),
+          ),
           SizedBox(height: 20),
-          _buildCard(context, "Profile", ProfilePage()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _buildCard(context, "Profile", ProfilePage()),
+          ),
         ],
       ),
     );
   }
+
 
   Widget _buildCard(BuildContext context, String label, Widget page) {
     return GestureDetector(
