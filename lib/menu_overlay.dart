@@ -63,11 +63,7 @@ class _MenuOverlayState extends State<MenuOverlay> {
 
   void _completeAndNavigate() {
     _runCommand();
-    setState(() {
-      // Change button text to 'Done'
-      // Optional: You can change any other state related to completion here.
-    });
-    // Navigate back to Course.dart screen after completion
+    setState(() {});
     Navigator.pop(context);
   }
 
@@ -108,26 +104,36 @@ class _MenuOverlayState extends State<MenuOverlay> {
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 10),
-              for (var command in _commandsInCodeSpace)
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      color: Colors.white,
-                      child: Text(
-                        command,
-                        style: TextStyle(color: Colors.black),
+              Container(
+                height: 150, // Fixed height for the scrollable section
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: _commandsInCodeSpace
+                        .map(
+                          (command) => Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            color: Colors.white,
+                            child: Text(
+                              command,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.close, color: Colors.white),
+                            onPressed: () => _cancelCommand(command),
+                          ),
+                        ],
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.close, color: Colors.white),
-                      onPressed: () => _cancelCommand(command),
-                    ),
-                  ],
+                    )
+                        .toList(),
+                  ),
                 ),
+              ),
               SizedBox(height: 10),
               ElevatedButton(
-                onPressed: _completeAndNavigate, // Use the new method
+                onPressed: _completeAndNavigate,
                 child: Text('Done', style: TextStyle(color: Colors.black)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,

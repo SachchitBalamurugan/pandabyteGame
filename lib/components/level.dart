@@ -10,6 +10,7 @@ import 'package:game_pandabyte/components/player.dart';
 import 'package:game_pandabyte/pixel_adventure.dart';
 
 class Level extends World with HasGameRef<PixelAdventure>{
+
   final String levelName;
   Level({required this.levelName});
   late TiledComponent level;
@@ -18,6 +19,7 @@ class Level extends World with HasGameRef<PixelAdventure>{
 
   @override
   FutureOr<void> onLoad() async {
+
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
     add(level);
 
@@ -34,25 +36,26 @@ class Level extends World with HasGameRef<PixelAdventure>{
 
   void _scrollingBackground() {
     final backgroundLayer = level.tileMap.getLayer('Background');
-    const tileSize = 64;
-    final numTilesY = (game.size.y / tileSize).floor();
-    final numTilesX = (game.size.x / tileSize).floor();
+    const tileSize = 64; // Size of each tile
+    final numTilesY = (level.tileMap.map.height * tileSize).toInt(); // Total level height
+    final numTilesX = (level.tileMap.map.width * tileSize).toInt(); // Total level width
 
     if (backgroundLayer != null) {
       final backgroundColor =
-          backgroundLayer.properties.getValue('BackgroundColor');
+      backgroundLayer.properties.getValue('BackgroundColor');
 
-      for(double y = 0; y < (game.size.y / numTilesY); y++){
-        for (double x = 0; x < numTilesX; x++) {
+      for (double y = 0; y < numTilesY; y += tileSize) {
+        for (double x = 0; x < numTilesX; x += tileSize) {
           final backgroundTile = BackgroundTile(
             color: backgroundColor ?? 'Gray',
-            position: Vector2(x * tileSize, y * tileSize - tileSize - tileSize),
+            position: Vector2(x, y),
           );
           add(backgroundTile);
         }
       }
     }
   }
+
 
   void _spawningObjects() {
     final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'mazeGame.dart';
 
 String gameLevel = 'Level_01';
-
+int priorityFruit = 0;
 class Course1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
                         circleStates[0] = true;
                       });
                       gameLevel = 'Level_01';
+                      priorityFruit = -1;
                       Navigator.pushNamed(context, '/game'); // Navigate using named route
                     },
                     child: buildCircle(
@@ -72,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                         circleStates[1] = true;
                       });
                       gameLevel = 'Level_02';
+                      priorityFruit = 0;
                       Navigator.pushNamed(context, '/game'); // Navigate using named route
                     },
                     child: buildCircle(

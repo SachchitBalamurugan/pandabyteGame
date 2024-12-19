@@ -2,16 +2,18 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:game_pandabyte/components/collision_block.dart';
-import 'package:game_pandabyte/components/player_hitbox.dart';
+import 'package:game_pandabyte/components/custom_hitbox.dart';
 import 'package:game_pandabyte/components/utils.dart';
 import 'dart:async';
 
 import 'package:game_pandabyte/pixel_adventure.dart';
+
+import 'fruit.dart';
 double isMoveRequested = 1;
 enum PlayerState { idle, running, jumping, falling }
 
 class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, KeyboardHandler {
+    with HasGameRef<PixelAdventure>, KeyboardHandler, CollisionCallbacks{
   String character;
   Player({position, required this.character}) : super(position: position);
 
@@ -22,7 +24,7 @@ class Player extends SpriteAnimationGroupComponent
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
-  final double _jumpForce = 200; // change jump height
+  final double _jumpForce = 280; // change jump height
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
 
@@ -31,7 +33,7 @@ class Player extends SpriteAnimationGroupComponent
   bool isOnGround = false;
   bool hasJumped = false;
   List<CollisionBlock> collisionBlocks = [];
-  PlayerHitbox hitbox = PlayerHitbox(
+  CustomHitbox hitbox = CustomHitbox(
       offsetX: 10,
       offsetY: 4,
       width: 14,
@@ -102,20 +104,9 @@ class Player extends SpriteAnimationGroupComponent
 
 
   @override
-  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    horizontalMovement = 0;
-    final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA)
-        || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-
-    final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD)
-        || keysPressed.contains(LogicalKeyboardKey.arrowRight);
-
-    horizontalMovement += isLeftKeyPressed ? -1 : 0;
-    horizontalMovement += isRightKeyPressed ? 1 : 0;
-
-
-    hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
-    return super.onKeyEvent(event, keysPressed);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Fruit) other.collidingWithPlayer();
+    super.onCollision(intersectionPoints, other);
   }
 
   void _loadAllAnimations() {
