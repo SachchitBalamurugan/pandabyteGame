@@ -7,7 +7,6 @@ import 'package:game_pandabyte/screens/Course.dart';
 import 'package:game_pandabyte/screens/home_page.dart'; // Import the homepage
 import 'components/player.dart';
 
-// Entry point of the application
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Flame.device.fullScreen(); // Set device to full screen
@@ -29,29 +28,34 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0; // Selected index for the bottom navigation bar
+  final PageController _pageController = PageController(); // PageController for navigation
 
   final List<Widget> _pages = [
-    HomePage(), // HomePage is shown initially
-    GamePage(), // GamePage is navigated to from the bottom nav
-    TestPage(), // Test Page (for future implementation)
-    CoursePage(), // Courses Page (future navigation)
+    HomePage(), // HomePage
+    GamePage(), // GamePage
+    TestPage(), // TestPage
+    CoursePage(), // CoursePage
   ];
 
-  // Handle navigation tap
+  // Handle bottom navigation tap
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    _pageController.jumpToPage(index); // Navigate to the selected page
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose(); // Dispose PageController when no longer needed
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        controller: PageController(initialPage: _selectedIndex),
+        controller: _pageController,
         onPageChanged: (index) {
           setState(() {
-            _selectedIndex = index;
+            _selectedIndex = index; // Update selected index
           });
         },
         children: _pages,
@@ -108,8 +112,6 @@ class GamePage extends StatelessWidget {
 class HomePage extends StatelessWidget {
   final Color bgColor = Color(0xFF141F23);
   final Color cardColor = Color(0xFF334A56);
-  final Color progressBarBgColor = Color(0xFF16252D);
-  final Color progressColor = Color(0xFF25F277);
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +119,6 @@ class HomePage extends StatelessWidget {
       backgroundColor: bgColor,
       body: Column(
         children: [
-          // Top bar with fire icon, welcome text, and progress bar
           Container(
             color: cardColor,
             padding: EdgeInsets.symmetric(vertical: 36, horizontal: 20),
@@ -139,23 +140,18 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          // Container 1: Navigates to AssignmentPage
           _buildCard(context, "Assignments", Course1()),
           SizedBox(height: 20),
-          // Container 2: Navigates to FavoritePage
           _buildCard(context, "Favorites", FavoritePage()),
           SizedBox(height: 20),
-          // Container 3: Navigates to TreasurePage
           _buildCard(context, "Treasure", TreasurePage()),
           SizedBox(height: 20),
-          // Container 4: Navigates to ProfilePage
           _buildCard(context, "Profile", ProfilePage()),
         ],
       ),
     );
   }
 
-  // Function to build each card with progress bar below
   Widget _buildCard(BuildContext context, String label, Widget page) {
     return GestureDetector(
       onTap: () {
@@ -166,11 +162,10 @@ class HomePage extends StatelessWidget {
       },
       child: Stack(
         children: [
-          // Main card container with rounded corners
           Container(
             height: 100,
             decoration: BoxDecoration(
-              color: Color(0xFF3A4E5F), // Background color similar to the card
+              color: Color(0xFF3A4E5F),
               borderRadius: BorderRadius.circular(10),
             ),
             padding: EdgeInsets.all(16),
@@ -186,8 +181,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Icon container that appears to "stick out" on the right
           Positioned(
             right: 0,
             top: 0,
@@ -195,7 +188,7 @@ class HomePage extends StatelessWidget {
             child: Container(
               width: 50,
               decoration: BoxDecoration(
-                color: Color(0xFF7594A4), // Color for the icon background
+                color: Color(0xFF7594A4),
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(10),
                   bottomRight: Radius.circular(10),
@@ -204,35 +197,6 @@ class HomePage extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward,
                 color: Colors.white,
-              ),
-            ),
-          ),
-
-          // Progress bar at the bottom of the card
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 8,
-              decoration: BoxDecoration(
-                color: Color(0xFF1A2733), // Background color for the progress bar
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-              ),
-              child: FractionallySizedBox(
-                widthFactor: 0.25, // Set progress width here (e.g., 25% fill)
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFF00FF99), // Color for the filled part of the progress bar
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                    ),
-                  ),
-                ),
               ),
             ),
           ),
