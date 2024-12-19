@@ -39,13 +39,13 @@
   <object id="4" name="Player" type="Player" x="208" y="368" width="30.4225" height="29.8888"/>
   <object id="31" name="Bananas" type="Fruit" x="128" y="112" width="32" height="32"/>
   <object id="32" name="Cherries" type="Fruit" x="96" y="192" width="32" height="32"/>
-  <object id="33" name="Apples" type="Fruit" x="96" y="240" width="32" height="32"/>
+  <object id="33" name="Apple" type="Fruit" x="96" y="240" width="32" height="32"/>
   <object id="34" name="Cherries" type="Fruit" x="176" y="128" width="32" height="32"/>
   <object id="35" name="Cherries" type="Fruit" x="208" y="128" width="32" height="32"/>
   <object id="36" name="Cherries" type="Fruit" x="192" y="96" width="32" height="32"/>
-  <object id="37" name="Cherries" type="Fruit" x="240" y="160" width="32" height="32"/>
-  <object id="38" name="Cherries" type="Fruit" x="272" y="160" width="32" height="32"/>
-  <object id="39" name="Cherries" type="Fruit" x="256" y="128" width="32" height="32"/>
+  <object id="37" name="Pineapple" type="Fruit" x="240" y="160" width="32" height="32"/>
+  <object id="38" name="Pineapple" type="Fruit" x="272" y="160" width="32" height="32"/>
+  <object id="39" name="Pineapple" type="Fruit" x="256" y="128" width="32" height="32"/>
   <object id="40" name="Kiwi" type="Fruit" x="272" y="336" width="32" height="32"/>
   <object id="41" name="Orange" type="Fruit" x="112" y="336" width="32" height="32"/>
  </objectgroup>
