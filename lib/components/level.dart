@@ -3,10 +3,12 @@ import 'dart:async';
 
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:game_pandabyte/components/background_tile.dart';
 import 'package:game_pandabyte/components/collision_block.dart';
 import 'package:game_pandabyte/components/player.dart';
+import 'package:game_pandabyte/pixel_adventure.dart';
 
-class Level extends World {
+class Level extends World with HasGameRef<PixelAdventure>{
   final String levelName;
   Level({required this.levelName});
   late TiledComponent level;
@@ -18,6 +20,40 @@ class Level extends World {
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
     add(level);
 
+    _scrollingBackground();
+    _spawningObjects();
+    _addCollisions();
+
+
+
+
+
+    return super.onLoad();
+  }
+
+  void _scrollingBackground() {
+    final backgroundLayer = level.tileMap.getLayer('Background');
+    const tileSize = 64;
+    final numTilesY = (game.size.y / tileSize).floor();
+    final numTilesX = (game.size.x / tileSize).floor();
+
+    if (backgroundLayer != null) {
+      final backgroundColor =
+          backgroundLayer.properties.getValue('BackgroundColor');
+
+      for(double y = 0; y < (game.size.y / numTilesY); y++){
+        for (double x = 0; x < numTilesX; x++) {
+          final backgroundTile = BackgroundTile(
+            color: backgroundColor ?? 'Gray',
+            position: Vector2(x * tileSize, y * tileSize - tileSize - tileSize),
+          );
+          add(backgroundTile);
+        }
+      }
+    }
+  }
+
+  void _spawningObjects() {
     final spawnPointLayer = level.tileMap.getLayer<ObjectGroup>('Spawnpoints');
 
     if (spawnPointLayer != null) {
@@ -34,7 +70,9 @@ class Level extends World {
         }
       }
     }
+  }
 
+  void _addCollisions() {
     final collisionsLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
 
     if (collisionsLayer != null) {
@@ -59,10 +97,8 @@ class Level extends World {
         }
       }
     }
-
-    // Now player is accessible, so we can assign collision blocks
+// Now player is accessible, so we can assign collision blocks
     player.collisionBlocks = collissionBlocks;
-
-    return super.onLoad();
   }
+
 }
