@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:game_pandabyte/screens/Course.dart';
+import 'main.dart';
 import 'pixel_adventure.dart';
 import 'components/player.dart';
 
-double collectedF=0;
+double collectedF = 0;
+bool showConditionSection = false; //show the if then dropdown menu
 
 class MenuOverlay extends StatefulWidget {
   const MenuOverlay({
@@ -106,7 +109,7 @@ class _MenuOverlayState extends State<MenuOverlay> {
     }
     _checkConditionsAndActions(command);
   }
-  //if and action logic
+
   void _checkConditionsAndActions(String command) {
     if (command.contains('if (collected apple)') && command.contains('Player.activate(shield)')) {
       collectedF = 1;
@@ -132,12 +135,10 @@ class _MenuOverlayState extends State<MenuOverlay> {
 
   void _runCommand() {
     setState(() {
-      // Execute the latest command only
       if (_commandsInCodeSpace.isNotEmpty) {
         String latestCommand = _commandsInCodeSpace.last;
-        _handleCommand(latestCommand);  // Execute the latest command
+        _handleCommand(latestCommand);
         print('Running command: $latestCommand');
-        // Clear the commands after running
         _commandsInCodeSpace.clear();
       }
     });
@@ -153,6 +154,14 @@ class _MenuOverlayState extends State<MenuOverlay> {
       isMoveRequested = 1;
       widget.player.stopMovement();
     }
+  }
+
+  // Navigate to a test class for now
+  void _navigateToTestClass() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Course1()),
+    );
   }
 
   @override
@@ -176,58 +185,60 @@ class _MenuOverlayState extends State<MenuOverlay> {
                   _buildDropdown('Move Right', _selectedMoveRight, _moveRightOptions, (newValue) {
                     setState(() {
                       _selectedMoveRight = newValue!;
-                      _commandsInCodeSpace = [_selectedMoveRight];  // Update to only include the latest selection
+                      _commandsInCodeSpace = [_selectedMoveRight];
                     });
                   }),
                   _buildDropdown('Move Left', _selectedMoveLeft, _moveLeftOptions, (newValue) {
                     setState(() {
                       _selectedMoveLeft = newValue!;
-                      _commandsInCodeSpace = [_selectedMoveLeft];  // Update to only include the latest selection
+                      _commandsInCodeSpace = [_selectedMoveLeft];
                     });
                   }),
                   _buildDropdown('Jump Right', _selectedJumpRight, _jumpRightOptions, (newValue) {
                     setState(() {
                       _selectedJumpRight = newValue!;
-                      _commandsInCodeSpace = [_selectedJumpRight];  // Update to only include the latest selection
+                      _commandsInCodeSpace = [_selectedJumpRight];
                     });
                   }),
                   _buildDropdown('Jump Left', _selectedJumpLeft, _jumpLeftOptions, (newValue) {
                     setState(() {
                       _selectedJumpLeft = newValue!;
-                      _commandsInCodeSpace = [_selectedJumpLeft];  // Update to only include the latest selection
+                      _commandsInCodeSpace = [_selectedJumpLeft];
                     });
                   }),
                   _buildDropdown('Jump', _selectedJump, _jumpOptions, (newValue) {
                     setState(() {
                       _selectedJump = newValue!;
-                      _commandsInCodeSpace = [_selectedJump];  // Update to only include the latest selection
+                      _commandsInCodeSpace = [_selectedJump];
                     });
                   }),
                 ],
               ),
               SizedBox(height: 12),
-              Text(
-                'Create a Condition:',
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 6,
-                children: [
-                  _buildDropdown('Condition', _selectedCondition, _conditionOptions, (newValue) {
-                    setState(() {
-                      _selectedCondition = newValue!;
-                    });
-                  }),
-                  _buildDropdown('Action', _selectedAction, _actionOptions, (newValue) {
-                    setState(() {
-                      _selectedAction = newValue!;
-                      String conditionalCommand = '$_selectedCondition { $_selectedAction; }';
-                      _commandsInCodeSpace = [conditionalCommand];  // Update to only include the latest selection
-                    });
-                  }),
-                ],
-              ),
+              if (showConditionSection) ...[
+                Text(
+                  'Create a Condition:',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: [
+                    _buildDropdown('Condition', _selectedCondition, _conditionOptions, (newValue) {
+                      setState(() {
+                        _selectedCondition = newValue!;
+                      });
+                    }),
+                    _buildDropdown('Action', _selectedAction, _actionOptions, (newValue) {
+                      setState(() {
+                        _selectedAction = newValue!;
+                        String conditionalCommand = '$_selectedCondition { $_selectedAction; }';
+                        _commandsInCodeSpace = [conditionalCommand];
+                      });
+                    }),
+                  ],
+                ),
+              ],
               SizedBox(height: 8),
               Container(
                 height: 60,
@@ -258,13 +269,21 @@ class _MenuOverlayState extends State<MenuOverlay> {
               ),
               SizedBox(height: 8),
               Wrap(
-                spacing: 16, // Space between buttons
+                spacing: 16,
                 children: [
                   ElevatedButton(
                     onPressed: _runCommand,
                     child: Text('Run', style: TextStyle(color: Colors.black, fontSize: 14)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.greenAccent, // Neon green color
+                      backgroundColor: Colors.greenAccent,
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: _navigateToTestClass,
+                    child: Text('Done', style: TextStyle(color: Colors.black, fontSize: 14)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
                       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                     ),
                   ),
@@ -301,6 +320,19 @@ class _MenuOverlayState extends State<MenuOverlay> {
             style: TextStyle(color: Colors.white, fontSize: 12),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// Example TestClass that the Done button navigates to
+class TestClass extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Test Class')),
+      body: Center(
+        child: Text('This is a test class', style: TextStyle(fontSize: 24)),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'mazeGame.dart';
-
+import 'package:game_pandabyte/menu_overlay.dart';
 String gameLevel = 'Level_01';
 int priorityFruit = 0;
 class Course1 extends StatelessWidget {
@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         circleStates[0] = true;
                       });
+                      showConditionSection = true; //show the if then dropdown in the menu overlay if it goes with the course
                       gameLevel = 'Level_01';
                       priorityFruit = -1;
                       Navigator.pushNamed(context, '/game'); // Navigate using named route
