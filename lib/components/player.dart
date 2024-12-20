@@ -10,6 +10,11 @@ import 'package:game_pandabyte/pixel_adventure.dart';
 
 import 'fruit.dart';
 double isMoveRequested = 1;
+double amountMoveRight = 1;
+double amountMoveLeft = 1;
+double amountMoveUpRight = 1;
+double amountMoveUpLeft = 1;
+
 enum PlayerState { idle, running, jumping, falling }
 
 class Player extends SpriteAnimationGroupComponent
@@ -24,7 +29,7 @@ class Player extends SpriteAnimationGroupComponent
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
-  final double _jumpForce = 280; // change jump height
+  final double _jumpForce = 170; // change jump height
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
 
@@ -55,32 +60,133 @@ class Player extends SpriteAnimationGroupComponent
     // Wait until isMoveRequested is true to proceed with movement logic
     if (isMoveRequested == 0) {
       // Move left by 1 step
-      moveLeft(1);
+      moveLeft(amountMoveLeft);
       isMoveRequested = 1;  // Stop further movement until triggered again
     } else if (isMoveRequested == 2) {
       // Move right by 1 step
-      moveRight(1);
+      moveRight(amountMoveRight);
       isMoveRequested = 1;  // Stop further movement until triggered again
 
-      } else if (isMoveRequested == 3) {
+      } else if (isMoveRequested == 20) {
+      // Move right by 1 step
+      print('worked');
+      moveRight2(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+
+    }
+    else if (isMoveRequested == 30) {
+      // Move right by 1 step
+      print('worked');
+      moveRight3(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+
+    }
+    else if (isMoveRequested == 40) {
+      // Move right by 1 step
+      print('worked');
+      moveRight4(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+
+    }
+    else if (isMoveRequested == 50) {
+      // Move right by 1 step
+      print('worked');
+      moveLeft2(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+
+    }
+    else if (isMoveRequested == 60) {
+      // Move right by 1 step
+      print('worked');
+      moveLeft3(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+
+    }
+    else if (isMoveRequested == 70) {
+      // Move right by 1 step
+      print('worked');
+      moveLeft4(1);
+      isMoveRequested = 1;  // Stop further movement until triggered again
+
+    }
+
+    else if (isMoveRequested == 3) {
       // Move right by 1 step
       // moveRight(1);
       // isMoveRequested = 1;  // Stop further movement until triggered again
       if (isOnGround) {
         _playerJump(dt); // Trigger the jump
-        moveRight(1);
+        moveRight(amountMoveUpRight);
       }
     }
-        else if (isMoveRequested == 4) {
+    else if (isMoveRequested == 80) {
+      // Move right by 1 step
+      // moveRight(1);
+      print('WOrked');
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveRight2(amountMoveUpRight);
+      }
+    }
+    else if (isMoveRequested == 90) {
+      // Move right by 1 step
+      // moveRight(1);
+      print('WOrked');
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveRight3(amountMoveUpRight);
+      }
+    }
+    else if (isMoveRequested == 100) {
+      // Move right by 1 step
+      // moveRight(1);
+      print('WOrked');
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveRight4(amountMoveUpRight);
+      }
+    }
+
+
+    else if (isMoveRequested == 4) {
           // Move right by 1 step
           // moveRight(1);
           // isMoveRequested = 1;  // Stop further movement until triggered again
           if (isOnGround) {
             _playerJump(dt);  // Trigger the jump
-            moveLeft(1);
-
+            moveLeft(amountMoveUpLeft);
           }
-    } else if (isMoveRequested == 5) {
+    } else if (isMoveRequested == 110) {
+      // Move right by 1 step
+      // moveRight(1);
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveLeft2(amountMoveUpLeft);
+      }
+    }
+    else if (isMoveRequested == 120) {
+      // Move right by 1 step
+      // moveRight(1);
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveLeft3(amountMoveUpLeft);
+      }
+    }
+    else if (isMoveRequested == 130) {
+      // Move right by 1 step
+      // moveRight(1);
+      // isMoveRequested = 1;  // Stop further movement until triggered again
+      if (isOnGround) {
+        _playerJump(dt); // Trigger the jump
+        moveLeft4(amountMoveUpLeft);
+      }
+    }
+    else if (isMoveRequested == 5) {
       // Move right by 1 step
       // moveRight(1);
       // isMoveRequested = 1;  // Stop further movement until triggered again
@@ -162,7 +268,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (isMoveRequested == 3 || isMoveRequested == 4 || isMoveRequested == 5) {
+    if (isMoveRequested == 3 || isMoveRequested == 4 || isMoveRequested == 5 || isMoveRequested == 80 || isMoveRequested == 90 || isMoveRequested == 100 || isMoveRequested == 110 || isMoveRequested == 120 || isMoveRequested == 130) {
       velocity.y = -_jumpForce;
       position.y += velocity.y * dt;
       isOnGround = false;
@@ -185,9 +291,60 @@ class Player extends SpriteAnimationGroupComponent
     print(isMoveRequested);
   }
 
+  void moveLeft2(double distance) {
+
+
+    horizontalMovement = -distance; // Move left
+    Future.delayed(Duration(milliseconds: 600), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+    print('moveLeft called with distance: $distance'); // Print statement for testing
+    print(isMoveRequested);
+  }
+  void moveLeft3(double distance) {
+
+
+    horizontalMovement = -distance; // Move left
+    Future.delayed(Duration(milliseconds: 900), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+    print('moveLeft called with distance: $distance'); // Print statement for testing
+    print(isMoveRequested);
+  }
+
+  void moveLeft4(double distance) {
+
+
+    horizontalMovement = -distance; // Move left
+    Future.delayed(Duration(milliseconds: 1200), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+    print('moveLeft called with distance: $distance'); // Print statement for testing
+    print(isMoveRequested);
+  }
+
   void moveRight(double distance) {
     horizontalMovement = distance; // Move right
     Future.delayed(Duration(milliseconds: 300), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+  }
+
+  void moveRight2(double distance) {
+    horizontalMovement = distance; // Move right
+    Future.delayed(Duration(milliseconds: 600), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+  }
+  void moveRight3(double distance) {
+    horizontalMovement = distance; // Move right
+    Future.delayed(Duration(milliseconds: 900), () {
+      stopMovement(); // Stop the movement after 1 second
+    });
+  }
+  void moveRight4(double distance) {
+    horizontalMovement = distance; // Move right
+    Future.delayed(Duration(milliseconds: 1200), () {
       stopMovement(); // Stop the movement after 1 second
     });
   }
