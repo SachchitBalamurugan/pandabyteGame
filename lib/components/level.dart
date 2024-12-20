@@ -9,6 +9,8 @@ import 'package:game_pandabyte/components/fruit.dart';
 import 'package:game_pandabyte/components/player.dart';
 import 'package:game_pandabyte/pixel_adventure.dart';
 
+import 'saw.dart';
+
 class Level extends World with HasGameRef<PixelAdventure>{
 
   final String levelName;
@@ -76,6 +78,20 @@ class Level extends World with HasGameRef<PixelAdventure>{
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(fruit);
+            break;
+          case 'Saw':
+            final isVertical = spawnPoint.properties.getValue('isVertical');
+            final offNeg = spawnPoint.properties.getValue('offNeg');
+            final offPos = spawnPoint.properties.getValue('offPos');
+            final saw = Saw(
+              isVertical: isVertical,
+              offNeg: offNeg,
+              offPos: offPos,
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(saw);
+            break;
           default:
         }
       }

@@ -29,7 +29,7 @@ class Player extends SpriteAnimationGroupComponent
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
-  final double _jumpForce = 170; // change jump height
+  final double _jumpForce = 150; // change jump height
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
 
