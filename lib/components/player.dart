@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:game_pandabyte/components/collision_block.dart';
 import 'package:game_pandabyte/components/custom_hitbox.dart';
 import 'package:game_pandabyte/components/utils.dart';
+import 'package:game_pandabyte/menu_overlay.dart';
 import 'dart:async';
 
 import 'package:game_pandabyte/pixel_adventure.dart';
@@ -66,6 +67,11 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
+    if(collectedF ==1){
+      final neonGreenColor = Color(0x8000FF00); // Neon green with 50% transparency (alpha 0x80)
+      this.paint = Paint()
+        ..colorFilter = ColorFilter.mode(neonGreenColor, BlendMode.overlay);
+    }
     // Wait until isMoveRequested is true to proceed with movement logic
     if (isMoveRequested == 0) {
       // Move left by 1 step
@@ -443,22 +449,28 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() {
-    const hitDuration = Duration(milliseconds: 350);
-    const appearingDuration = Duration(milliseconds: 350);
-    const canMoveDuration = Duration(milliseconds: 400);
-    gotHit = true;
-    current = PlayerState.hit;
-    Future.delayed(hitDuration,(){
-      scale.x = 1;
-      position = startingPosition - Vector2.all(32);
-      current= PlayerState.appearing;
-      Future.delayed(appearingDuration,(){
-        velocity = Vector2.zero();
-        position = startingPosition;
-        _updatePlayerState();
-        Future.delayed(canMoveDuration, ()=>gotHit = false);
+    if (shield != 1) {
+      const hitDuration = Duration(milliseconds: 350);
+      const appearingDuration = Duration(milliseconds: 350);
+      const canMoveDuration = Duration(milliseconds: 400);
+      gotHit = true;
+      current = PlayerState.hit;
+      Future.delayed(hitDuration, () {
+        scale.x = 1;
+        position = startingPosition - Vector2.all(32);
+        current = PlayerState.appearing;
+        Future.delayed(appearingDuration, () {
+          velocity = Vector2.zero();
+          position = startingPosition;
+          _updatePlayerState();
+          Future.delayed(canMoveDuration, () => gotHit = false);
+        });
       });
-    });
-    //position = startingPosition;
+      //position = startingPosition;
+    } else {
+      final neonGreenColor = Color(0x8000FF00); // Neon green with 50% transparency (alpha 0x80)
+      this.paint = Paint()
+        ..colorFilter = ColorFilter.mode(neonGreenColor, BlendMode.overlay);
+    }
   }
 }

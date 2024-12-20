@@ -1,10 +1,12 @@
 import 'dart:async';
-
+import 'package:game_pandabyte/menu_overlay.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:game_pandabyte/components/custom_hitbox.dart';
+import 'package:game_pandabyte/menu_overlay.dart';
 import 'package:game_pandabyte/pixel_adventure.dart';
 import 'package:game_pandabyte/screens/Course.dart';
+double shield = 0;
 class Fruit extends SpriteAnimationComponent with HasGameRef<PixelAdventure>, CollisionCallbacks{
   final String fruit;
   Fruit({
@@ -49,6 +51,11 @@ class Fruit extends SpriteAnimationComponent with HasGameRef<PixelAdventure>, Co
 
   void collidingWithPlayer() {
     if(!_collected) {
+      if (collectedF ==1){
+        shield = 1;
+        collectedF=0;
+      }
+
       animation = SpriteAnimation.fromFrameData(
           game.images.fromCache('Items/Fruits/Collected.png'),
           SpriteAnimationData.sequenced(
